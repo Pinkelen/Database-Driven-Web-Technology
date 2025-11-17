@@ -51,6 +51,19 @@ def delete_movie(id):
     db.session.delete(movie)
     db.session.commit()
     return redirect(url_for('index'))
+
+@app.route('/edit_movie/<int:id>', methods=['GET', 'POST'])
+def edit_movie(id):
+    movie = Movie.query.get_or_404(id)
+
+    if request.method == "POST":
+        movie.name = request.form['name']
+        movie.year = request.form['year']
+        movie.oscars = request.form['oscars']
+        db.session.commit()
+        return redirect(url_for('index'))
+
+    return render_template('add_movie.html', movie=movie)
     
 if __name__ == '__main__':
     app.run(debug=True)
