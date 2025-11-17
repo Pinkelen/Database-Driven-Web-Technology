@@ -25,7 +25,7 @@ class Movie(db.Model):
 with app.app_context():
     db.create_all()
 
-@app.route('/', methods=[...])
+@app.route('/', methods=['GET'])
 def index():
     movies = Movie.query.all()  # Get all movies from the database
     return render_template('index.html', movies=movies)
