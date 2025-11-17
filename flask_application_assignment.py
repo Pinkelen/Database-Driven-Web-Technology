@@ -16,8 +16,10 @@ db = SQLAlchemy(app)
 
 # Movie model representing the movies table
 class Movie(db.Model):
-    __table_args__ = {'extend_existing': True}
-     ...
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    year = db.Column(db.Integer, nullable=False)
+    oscars = db.Column(db.Integer, nullable=False)
 
 # Create the database and the tables for the model
 with app.app_context():
@@ -28,21 +30,27 @@ def index():
     movies = Movie.query.all()  # Get all movies from the database
     return render_template('index.html', movies=movies)
 
-@app.route('/add_movie', methods=[...])
+@app.route('/add_movie', methods=['GET', 'POST'])
 def add_movie():
-    if request.method == ... :
-        #get items from form 
+    if request.method == "POST":
+        name = request.form['name']
+        year = request.form['year']
+        oscars = request.form['oscars']
 
-        # Create a new movie entry
-        new_movie = Movie(...)
-
-        # Add to the session and commit to the database
+        new_movie = Movie(name=name, year=year, oscars=oscars)
         db.session.add(new_movie)
         db.session.commit()
 
         return redirect(url_for('index'))
 
-    return render_template('add_movie.html')
+    return render_template('add_movie.html', movie=None)
 
+@app.route('/delete_movie/<int:id>', methods=['POST'])
+def delete_movie(id):
+    movie = Movie.query.get_or_404(id)
+    db.session.delete(movie)
+    db.session.commit()
+    return redirect(url_for('index'))
+    
 if __name__ == '__main__':
     app.run(debug=True)
