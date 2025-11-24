@@ -85,3 +85,8 @@ def delete_movie(id):
     db.session.delete(movie)
     db.session.commit()
     return redirect(url_for('routes_bp.index'))
+
+# --- Error Handler ---
+@routes_bp.app_errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html"), 404
