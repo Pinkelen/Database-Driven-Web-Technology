@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from app.forms import RegistrationForm, LoginForm
 
 from app import db, login_manager
 from app.models import Movie, User
@@ -10,36 +11,6 @@ routes_bp = Blueprint('routes_bp', __name__)
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-# --- Signup ---
-@routes_bp.route('/register', methods=['GET','POST'])
-def register():
-    if request.method == 'POST':
-        user = User(
-            username=request.form['username'],
-            password=generate_password_hash(request.form['password'])
-        )
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for('routes_bp.login'))
-    return render_template('register.html')
-
-# --- Login ---
-@routes_bp.route('/login', methods=['GET','POST'])
-def login():
-    if request.method == 'POST':
-        user = User.query.filter_by(username=request.form['username']).first()
-        if user and check_password_hash(user.password, request.form['password']):
-            login_user(user)
-            return redirect(url_for('routes_bp.index'))
-    return render_template('login.html')
-
-# --- Logout ---
-@routes_bp.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('routes_bp.login'))
 
 # --- Home ---
 @routes_bp.route('/')
@@ -90,3 +61,27 @@ def delete_movie(id):
 @routes_bp.app_errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404
+
+# --- Signup ---
+@routes_bp.route('/register', methods=['GET','POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data,
+                    email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('routes_bp.login'))
+    return render_template('register.html', form=form)
+
+# --- Login ---
+@routes_bp.route('/login', methods=['GET','POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user)
+            return redirect(url_for('routes_bp.index'))
+    return render_template('login.html', form=form)
