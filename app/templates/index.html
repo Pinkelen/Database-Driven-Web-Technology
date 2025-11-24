@@ -15,16 +15,16 @@
         <li>
             {{ movie.name }} ({{ movie.year }}) – Oscars: {{ movie.oscars }}
             |
-            <a href="{{ url_for('edit_movie', id=movie.id) }}">Edit</a>
+            <a href="{{ url_for('routes_bp.edit_movie', id=movie.id) }}">Edit</a>
             |
-            <form action="{{ url_for('delete_movie', id=movie.id) }}" method="POST" style="display:inline;">
+            <form action="{{ url_for('routes_bp.delete_movie', id=movie.id)) }}" method="POST" style="display:inline;">
                 <button type="submit">Delete</button>
             </form>
         </li>
         {% endfor %}
     </ul>
 
-    <a href="{{ url_for('add_movie') }}">Add a New Movie</a>
+    <a href="{{ url_for('routes_bp.add_movie')) }}">Add a New Movie</a>
 </body>
 
 </html>
