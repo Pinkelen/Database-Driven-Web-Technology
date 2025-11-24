@@ -47,7 +47,7 @@ def index():
     movies = Movie.query.all()
     return render_template("index.html", movies=movies)
 
-# --- Add ---
+# --- Add Movie ---
 @routes_bp.route('/add_movie', methods=['GET','POST'])
 @login_required
 def add_movie():
@@ -62,7 +62,22 @@ def add_movie():
         return redirect(url_for('routes_bp.index'))
     return render_template('add_movie.html', movie=None)
 
-# --- Delete ---
+# --- EDIT MOVIE ---
+@routes_bp.route('/edit_movie/<int:id>', methods=['GET','POST'])
+@login_required
+def edit_movie(id):
+    movie = Movie.query.get_or_404(id)
+
+    if request.method == 'POST':
+        movie.name = request.form['name']
+        movie.year = request.form['year']
+        movie.oscars = request.form['oscars']
+        db.session.commit()
+        return redirect(url_for('routes_bp.index'))
+
+    return render_template('add_movie.html', movie=movie)
+
+# --- Delete Movie ---
 @routes_bp.route('/delete_movie/<int:id>', methods=['POST'])
 @login_required
 def delete_movie(id):
