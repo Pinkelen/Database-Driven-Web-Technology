@@ -22,6 +22,10 @@ def create_app():
     from app.routes import routes_bp
     app.register_blueprint(routes_bp)
 
+    from app.api import api_bp
+    app.register_blueprint(api_bp)
+
+
     # Create all tables
     with app.app_context():
         db.create_all()
