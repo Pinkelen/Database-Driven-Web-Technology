@@ -7,6 +7,7 @@ class Movie(db.Model):
     name = db.Column(db.String(100), nullable=False)
     year = db.Column(db.Integer, nullable=False)
     oscars = db.Column(db.Integer, nullable=False)
+    genre = db.Column(db.String(50))
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
