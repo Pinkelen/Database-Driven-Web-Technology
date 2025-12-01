@@ -13,7 +13,7 @@
     <ul>
         {% for movie in movies %}
         <li>
-            {{ movie.name }} ({{ movie.year }}) – Oscars: {{ movie.oscars }}
+            {{ movie.name }} ({{ movie.year }}) – Genre: {{movie.genre if movie.genre else "Not yet specified"}} – Oscars: {{ movie.oscars }}
             |
             <a href="{{ url_for('routes_bp.edit_movie', id=movie.id) }}">Edit</a>
             |

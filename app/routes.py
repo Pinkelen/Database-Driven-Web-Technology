@@ -26,7 +26,7 @@ def add_movie():
         new_movie = Movie(
             name=request.form['name'],
             year=request.form['year'],
-            oscars=request.form['oscars']
+            oscars=request.form['oscars'],
             genre=request.form.get('genre', None)
         )
         db.session.add(new_movie)
