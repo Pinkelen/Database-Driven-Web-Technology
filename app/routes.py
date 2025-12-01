@@ -27,6 +27,7 @@ def add_movie():
             name=request.form['name'],
             year=request.form['year'],
             oscars=request.form['oscars']
+            genre=request.form.get('genre', None)
         )
         db.session.add(new_movie)
         db.session.commit()
@@ -43,6 +44,7 @@ def edit_movie(id):
         movie.name = request.form['name']
         movie.year = request.form['year']
         movie.oscars = request.form['oscars']
+        movie.genre = request.form.get('genre', movie.genre)
         db.session.commit()
         return redirect(url_for('routes_bp.index'))
 
