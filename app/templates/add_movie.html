@@ -20,6 +20,10 @@
         <label>Oscars Won:</label><br>
         <input type="number" name="oscars" value="{{ movie.oscars if movie else '' }}" required><br><br>
 
+        <label>Genre:</label><br>
+        <input type="text" name="genre" value="{{ movie.genre if movie else '' }}"><br><br>
+
+
         <button type="submit">{{ 'Update Movie' if movie else 'Add Movie' }}</button>
     </form>
 
